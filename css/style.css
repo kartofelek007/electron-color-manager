@@ -1,7 +1,13 @@
+
 body {
     background: #1E1F1C;
     padding-top: 0px;
     font-family: sans-serif;
+}
+
+.selection {
+    border: 2px solid rgba(30,144,255, 1);
+    background: rgba(30,144,255, 0.2);
 }
 
 .menu {
@@ -19,8 +25,8 @@ body {
     transition: 0.2s;
 }
 .menu-btn svg {
-    width: 25px;
-    height: 25px;
+    width: 24px;
+    height: 24px;
     fill: #fff;
     stroke: none;
     transition: 0.2s;
@@ -57,8 +63,9 @@ body {
 }
 .menu-submenu input[type="checkbox"]::before {
     content: "";
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 1px;
     background: dodgerblue;
     display: block;
     transform: scale(0.5);
@@ -96,16 +103,16 @@ body {
 }
 
 .selected-colors {
-    background: rgba(0,0,0,0.8);
-    border-radius: 0 0 20px 0;
+    background: rgba(10,10,10,0.7);
+    border-radius: 0 20px 0 0;
     z-index: 200;
     position: fixed;
-    top:0;
+    bottom: 0;
     left:0;
     transition: 0.5s;
     display: flex;
-    flex-direction: column;
-    /* border-radius: 0 0 5px 0; */
+    max-height: 500px;
+    flex-wrap: wrap;;
     box-shadow: 0 0 4px rgba(0,0,0,0.7);
 }
 .selected-colors div {
@@ -150,16 +157,12 @@ body {
     position: relative;
     cursor: pointer;
     font-weight: bold;
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
-    -webkit-text-fill-color: white;
-    -webkit-text-stroke-width: 1px;
-    -webkit-text-stroke-color: rgba(0,0,0,0.4);
 }
-.palette-element:hover {
-    z-index: 2;
+.palette-element.selected {
     box-shadow:
-    inset 0 0 0 3px rgba(255,255,255,1),
-    inset 0 0 0 2px rgba(0,0,0,1)
+    inset 0 0 0 6px rgba(255,255,255,1),
+    inset 0 0 0 7px rgba(0,0,0,0.2);
+    /* transform: scale(0.9); */
 }
 .palette-element-delete {
     position: absolute;
@@ -193,31 +196,4 @@ body {
 }
 .palette-element-add svg {
     fill: var(--color);
-}
-
-.selected {
-    animation: anim 0.2s 0s 1 alternate;
-}
-@keyframes anim {
-    100% {
-        transform:scale(1.1);
-    }
-}
-.popup {
-    position: fixed;
-    top:10px;
-    left:50%;
-    transform: translate(-50%, 0);
-    display: inline-block;
-    width:200px;
-    height:50px;
-    background: rgba(0,0,0,0.8);
-    color:#fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: sans-serif;
-    text-transform: uppercase;
-    border-radius: 4px;
-    z-index: 1000;
 }

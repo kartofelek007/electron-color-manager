@@ -33,11 +33,14 @@ const myApp = {
         const { width: screenW, height: screenH } = screen.getPrimaryDisplay().workAreaSize;
 
         this.mainWindow = new BrowserWindow({
-            icon : path.join(__dirname, '/images/icon.png'),
-            width: 400,
+            icon : path.join(__dirname, '/images/icon.ico'),
+            width: 360,
             height: screenH,
-            x: screenW - 400,
+            x: screenW - 360,
             y: 0,
+            // alwaysOnTop: false,
+            // frame : false,
+            tabbingIdentifier : "Colors",
             webPreferences: {
                 nodeIntegration: true
             }
@@ -45,12 +48,12 @@ const myApp = {
 
         this.mainWindow.loadFile('index.html');
 
-        this.mainWindow.on('minimize', function(event){
-            event.preventDefault();
+        this.mainWindow.on('minimize', e => {
+            e.preventDefault();
             this.mainWindow.hide();
         });
 
-        const imgPath = path.join(__dirname, '/images/icon.png');
+        const imgPath = path.join(__dirname, '/images/icon.ico');
 
         this.tray = new Tray(imgPath);
         this.tray.setToolTip('kolory');
@@ -63,17 +66,25 @@ const myApp = {
 
     createColorPickWindow() {
         this.pickedWindow = new BrowserWindow({
-            icon : path.join(__dirname, './images/icon.png'),
+            icon : path.join(__dirname, './images/icon.ico'),
             fullscreen: true,
-            alwaysOnTop: true,
+            alwaysOnTop : true,
+            movable : false,
+            minimizable : false,
+            maximizable : false,
             transparent: true,
+            tabbingIdentifier : "Colors",
             frame: false,
+            hide: true,
             webPreferences: {
                 nodeIntegration: true
             }
         });
 
         this.pickedWindow.loadFile('pick-color.html');
+        this.pickedWindow.once('ready-to-show', () => {
+            this.pickedWindow.show();
+        })
         //pickedWindow.webContents.openDevTools()
     },
 

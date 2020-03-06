@@ -26,6 +26,13 @@
       "**/*",
       "images/icon.png"
     ],
+    "extraFiles": [
+      {
+        "filter": [
+          "./collors.json"
+        ]
+      }
+    ],
     "win": {
       "target": "portable",
       "icon": "images/icon.ico"
@@ -33,5 +40,8 @@
     "portable": {
       "artifactName": "color_manager_portable.exe"
     }
+  },
+  "dependencies": {
+    "@simonwep/selection-js": "^1.6.0"
   }
 }

@@ -1,7 +1,7 @@
 export let options = {
     opts : {
         newLine : {status: false, textInMenu: "Znak nowej linii"},
-        comma   : {status: false, textInMenu: "Przecinek między kolorami"},
+        comma   : {status: false, textInMenu: "Przecinek pomiędzy kolorami"},
         quote   : {status: false, textInMenu: "Kolory w cudzysłowach"},
         rgba    : {status: false, textInMenu: "Kolory jako RGBA"}
     },

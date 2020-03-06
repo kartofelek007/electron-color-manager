@@ -1,6 +1,3 @@
-const fs = require("fs");
-const path = require("path");
-
 import copyToClipboard from "./utils/clipboard.js";
 import colorBrightness from "./utils/colorBrightness.js";
 import { saveColorsToFile, readColorsFromFile } from "./saveToFile.js";
@@ -8,25 +5,15 @@ import {DragDrop} from "./utils/dragDrop.js";
 import {hexToRgb, rgbToHex} from "./utils/colors.js";
 import {options} from "./opions.js";
 
-options.loadFromStorage(); //poczatkowe wczytanie
-
 const colors = readColorsFromFile();
-let addKeyPress = false; //podczas naciskania ctrl lub shift mozna wybierac kikla kolorów
 let selectedColors = []; //wybrane kolory
 
 const paletteElement = document.querySelector("#palette");
 
+options.loadFromStorage(); //poczatkowe wczytanie
 options.subscribe(function() {
     copyColors();
     options.saveToStorage();
-})
-
-document.addEventListener("keydown", e => {
-    addKeyPress = e.ctrlKey || e.shiftKey;
-})
-
-document.addEventListener("keyup", e => {
-    addKeyPress = e.ctrlKey || e.shiftKey;
 })
 
 const copyColors = function() {
@@ -44,12 +31,9 @@ const copyColors = function() {
     }
 
     if (selectedColors.length) {
-        console.log(`${qt}${colors.join(char)}${qt}`);
         copyToClipboard(`${qt}${colors.join(char)}${qt}`);
     }
 }
-
-
 
 
 const selectedColorsElement = document.querySelector("#selectedColors");
@@ -67,15 +51,15 @@ const createSelected = function() {
             if (colorBrightness(el) > 100) {
                 div.querySelector("svg").style.fill = "#000";
             }
+            div.addEventListener("click", e => {
+                const that = e.currentTarget;
+                const children = that.parentElement.children;
+                const index = [...children].findIndex(el => el === that);
+                selectedColors.splice(index, 1);
+                createSelected();
+            })
         }
         selectedColorsElement.append(div);
-        div.addEventListener("click", e => {
-            const that = e.currentTarget;
-            const children = that.parentElement.children;
-            const index = [...children].findIndex(el => el === that);
-            selectedColors.splice(index, 1);
-            createSelected();
-        })
     })
     copyColors();
 }
@@ -96,39 +80,64 @@ const createColorElement = function(color) {
     }
     btn.addEventListener("click", e => {
         e.currentTarget.parentElement.remove();
+        createSelected();
         saveColorsToFile();
     })
     div.append(btn);
 
-    div.addEventListener('click', function() {
-        if (!palette.classList.contains("palette-manage")) {
-            //this.classList.add('selected');
-            if (!addKeyPress) {
-                selectedColors = [];
-            }
-
-            if (selectedColors.length === 0) {
-                selectedColors.push(this.dataset.color);
-            }
-            if (selectedColors[selectedColors.length-1] !== this.dataset.color) {
-                selectedColors.push(this.dataset.color);
-            }
-            createSelected();
-        }
-    });
-
     return div;
 }
 
-export default function() {
-    for (const color of colors) {
-        const element = createColorElement(color);
-        paletteElement.append(element);
+
+//https://github.com/Simonwep/selection
+const Selection = require("@simonwep/selection-js");
+const selection = new Selection({
+    class: 'selection',
+    frame: document,
+    startThreshold: 10,
+    disableTouch: false,
+    mode: 'touch',
+    tapMode: 'native',
+    singleClick: true,
+    selectables: [
+        ".palette-element"
+    ],
+    startareas: ['html'],
+    boundaries: ['html'],
+    selectionAreaContainer: 'body',
+    scrollSpeedDivider: 10,
+    manualScrollSpeed: 750
+}).on('start', ({inst, selected, oe}) => {
+    if (!oe.ctrlKey && !oe.metaKey) {
+        for (const el of selected) {
+            el.classList.remove('selected');
+            inst.removeFromSelection(el);
+        }
+        inst.clearSelection();
     }
+
+}).on('move', ({changed: {removed, added}}) => {
+    for (const el of added) {
+        el.classList.add('selected');
+    }
+    for (const el of removed) {
+        el.classList.remove('selected');
+    }
+    selectedColors = [...paletteElement.querySelectorAll(".selected")].map(el => el.dataset.color)
+    createSelected();
+}).on('stop', ({inst}) => {
+    inst.keepSelection();
+});
+
+
+for (const color of colors) {
+    const element = createColorElement(color);
+    paletteElement.append(element);
 }
 
 
 
+//---------------------------------------
 //MENU
 //---------------------------------------
 const manageBtn = document.querySelector('#menuManage');
@@ -139,12 +148,22 @@ const drag = new DragDrop('#palette', {
     className : "palette-element"
 });
 
+const clearSelected = function() {
+    selectedColors = [];
+    selection.clearSelection()
+    paletteElement.querySelectorAll(".selected").forEach(el => el.classList.remove("selected"));
+    createSelected();
+}
+
 manageBtn.addEventListener("click", e => {
     palette.classList.toggle("palette-manage");
     if (palette.classList.contains("palette-manage")) {
+        selection.disable();
+        clearSelected();
         drag.initDraggable();
         selectedColorsElement.style.display = "none";
     } else {
+        selection.enable();
         drag.removeDraggable();
         selectedColorsElement.style.display = "";
     }

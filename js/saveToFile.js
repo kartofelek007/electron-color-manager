@@ -12,13 +12,19 @@ export const saveColorsToFile = function() {
     for (const el of elements) {
         json.colors.push(el.dataset.color);
     }
-
-    fs.writeFile(fileUrl, JSON.stringify(json), 'utf8', () => {});
+    try {
+    fs.writeFileSync(fileUrl, JSON.stringify(json));
+    } catch (err) {
+        alert("Wystąpił błąd w czasie zapisu", err);
+    }
 }
 
 export const readColorsFromFile = function() {
-    const urlJSONFile = "./colors.json";
-    const rawData = fs.readFileSync(fileUrl);
-    const json = JSON.parse(rawData);
-    return [...json.colors];
+    try {
+        const rawData = fs.readFileSync(fileUrl);
+        const json = JSON.parse(rawData);
+        return [...json.colors];
+    } catch (err) {
+        return [];
+    }
 }

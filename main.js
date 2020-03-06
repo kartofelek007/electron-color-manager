@@ -5,7 +5,8 @@ const {
     Menu,
     shell,
     Tray,
-    ipcMain
+    ipcMain,
+    nativeImage
 } = require( 'electron' )
 const path = require( 'path' )
 
@@ -32,7 +33,7 @@ const myApp = {
         const { width: screenW, height: screenH } = screen.getPrimaryDisplay().workAreaSize;
 
         this.mainWindow = new BrowserWindow({
-            icon : path.join(__dirname, './images/icon.ico'),
+            icon : path.join(__dirname, '/images/icon.png'),
             width: 400,
             height: screenH,
             x: screenW - 400,
@@ -49,7 +50,8 @@ const myApp = {
             this.mainWindow.hide();
         });
 
-        const imgPath = path.join(__dirname, './images/icon.ico');
+        const imgPath = path.join(__dirname, '/images/icon.png');
+
         this.tray = new Tray(imgPath);
         this.tray.setToolTip('kolory');
         this.tray.on('click', () => {
@@ -61,7 +63,7 @@ const myApp = {
 
     createColorPickWindow() {
         this.pickedWindow = new BrowserWindow({
-            icon : path.join(__dirname, './images/icon.ico'),
+            icon : path.join(__dirname, './images/icon.png'),
             fullscreen: true,
             alwaysOnTop: true,
             transparent: true,

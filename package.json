@@ -19,16 +19,19 @@
     "electron-builder": "^22.4.0"
   },
   "build": {
-        "appId": "PresentationDrawer",
-        "productName": "PresentationDrawer",
-        "copyright": "Marcin Domański",
-        "files": ["**/*", "images/icon.png"],
-        "win": {
-            "target": "portable",
-            "icon": "images/icon.ico"
-        },
-        "portable": {
-            "artifactName": "color_manager_portable.exe"
-        }
+    "appId": "PresentationDrawer",
+    "productName": "PresentationDrawer",
+    "copyright": "Marcin Domański",
+    "files": [
+      "**/*",
+      "images/icon.png"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "images/icon.ico"
+    },
+    "portable": {
+      "artifactName": "color_manager_portable.exe"
     }
+  }
 }

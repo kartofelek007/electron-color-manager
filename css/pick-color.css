@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+}
+#mainCanvas, #optCanvas {
+    cursor: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+#optCanvas {
+    pointer-events: none;
+}

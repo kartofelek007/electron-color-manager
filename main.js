@@ -9,7 +9,7 @@ const {
     nativeImage
 } = require( 'electron' )
 const path = require( 'path' )
-
+const debug = process.argv.includes("debug");
 
 const myApp = {
     mainWindow : null,
@@ -38,8 +38,8 @@ const myApp = {
             height: screenH,
             x: screenW - 360,
             y: 0,
-            // alwaysOnTop: false,
-            // frame : false,
+            alwaysOnTop: false,
+            frame : true,
             tabbingIdentifier : "Colors",
             webPreferences: {
                 nodeIntegration: true
@@ -61,7 +61,7 @@ const myApp = {
             this.toggleMainWindow();
         });
 
-        //Menu.setApplicationMenu( null );
+        if (!debug) Menu.setApplicationMenu( null );
     },
 
     createColorPickWindow() {

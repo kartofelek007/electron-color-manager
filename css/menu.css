@@ -1,0 +1,106 @@
+.menu {
+    display: flex;
+    justify-content: flex-end;
+    padding: 15px 0;
+}
+.menu-element {
+    padding: 0 4px;
+    position: relative;
+}
+.menu-btn {
+    background: #EDF2F7;
+    border-radius: 20px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.menu-btn svg {
+    width: 22px;
+    height: 22px;
+    fill: #718096;
+    stroke: none;
+    transition: 0.2s;
+}
+.menu-btn.active,
+.menu-btn:hover {
+    background: var(--color);
+}
+.menu-btn.active svg,
+.menu-btn:hover svg {
+    fill: #fff;
+}
+.menu-submenu {
+    color: #aaa;
+    display: none;
+    padding: 0 0 10px 0;
+}
+.menu-submenu input[type="checkbox"] {
+    cursor: pointer;
+    position: relative;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 40px;
+    height: 22px;
+    border-radius: 2px;
+    margin-left: 0;
+    margin-right: 10px;
+    outline: none;
+    background: #EDF2F7;
+    /* box-shadow: inset 0 1px 2px rgba(0,0,0,.2); */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.1s;
+    border-radius: 20px;
+}
+.menu-submenu input[type="checkbox"]::before {
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    content: "";
+    width: 16px;
+    height: 16px;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    display: block;
+    transition: 0.2s;
+}
+.menu-submenu input[type="checkbox"] + span {
+    transition: 0.2s color;
+    color: #666;
+}
+.menu-submenu input[type="checkbox"]:checked {
+    border-color: var(--color);
+    background: var(--color);
+}
+.menu-submenu input[type="checkbox"]:checked::before {
+    background: #fff;
+    transform: translate(18px);
+}
+.menu-submenu input[type="checkbox"]:checked + span {
+    /* color: var(--color); */
+}
+.menu-submenu.show {
+    display: block;
+}
+.menu-submenu-element {
+    margin-bottom: 5px;
+}
+.menu-submenu-element:last-child {
+    margin-bottom: 0;
+}
+.menu-submenu-label {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    font-size: 12px;
+    cursor: pointer;
+}
+.menu-submenu-label input {
+    margin-right: 6px;
+}

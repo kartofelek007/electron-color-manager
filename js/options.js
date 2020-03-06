@@ -1,4 +1,4 @@
-export let options = {
+export let optionsPub = {
     opts : {
         newLine : {status: false, textInMenu: "Znak nowej linii"},
         comma   : {status: false, textInMenu: "Przecinek pomiędzy kolorami"},
@@ -17,21 +17,17 @@ export let options = {
     },
 
     saveToStorage() {
-        console.log(JSON.stringify(this.opts));
         localStorage.setItem(
             "options",
             JSON.stringify(this.opts)
         );
-        console.log(localStorage.getItem("options"));
     },
 
     loadFromStorage() {
         const loadData = localStorage.getItem("options");
         if (loadData !== null) {
-            console.log(loadData);
-            console.log(JSON.parse(loadData));
             this.opts = JSON.parse(loadData);
-            console.log(this.opts);
         }
+        this.emit();
     }
 }

@@ -1,0 +1,56 @@
+.palette {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    grid-gap: 6px;
+}
+.palette-element {
+    border-radius: 2px;
+    height:50px;
+    display: flex;
+    font-size: 14px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+    justify-content: center;
+    align-items: center;
+    color:#fff;
+    font-family: sans-serif;
+    transition:0.1s all;
+    position: relative;
+    cursor: pointer;
+    font-weight: bold;
+}
+.palette-element.selected {
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,1), 0 2px 5px rgba(0,0,0,0.5);
+}
+.palette-element-delete {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    background: transparent;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    display: none;
+}
+.palette-element-delete svg {
+    width: 20px;
+    height: 20px;
+    opacity: 0.8;
+    fill: #fff;
+}
+.palette-manage .palette-element-delete {
+    display: block;
+}
+
+.palette-element-add {
+    cursor: pointer;
+    --color: rgba(255,255,255,0.5);
+    border: 1px solid var(--color);
+    color: var(--color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+}
+.palette-element-add svg {
+    fill: var(--color);
+}

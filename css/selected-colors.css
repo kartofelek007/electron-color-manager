@@ -1,0 +1,39 @@
+.selected-colors {
+    background: rgba(255,255,255,0.96);
+    /* border-radius: 0 20px 0 0; */
+    z-index: 200;
+    position: fixed;
+    bottom: 0;
+    left:0;
+    display: flex;
+    max-height: 500px;
+    /* flex-wrap: wrap;; */
+    display: grid;
+    width: 100%;
+    box-sizing: border-box;
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    grid-gap: 4px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.2);
+    padding: 5px;
+}
+.selected-colors div {
+    cursor: pointer;
+    /* border-radius: 50%; */
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+    height: 40px;
+    border-radius: 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.selected-colors div span {
+    display: block;
+    width: 18px;
+    height: 18px;
+}
+.selected-colors div svg {
+    width: 18px;
+    height: 18px;
+    fill: #fff;
+    opacity: 0.8;
+}

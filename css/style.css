@@ -1,199 +1,37 @@
+@import url("./menu.css");
+@import url("./selected-colors.css");
+@import url("./palette.css");
 
 body {
-    background: #1E1F1C;
-    padding-top: 0px;
+    --color: rgb(231, 29, 54);
+    min-height: 100vh;
+    margin: 0;
+    background: #fff;
+    padding: 10px;
+    box-sizing: border-box;
     font-family: sans-serif;
+}
+
+body::-webkit-scrollbar-track
+{
+    border-radius: 5px;
+    background-color: #F5F5F5;
+}
+
+body::-webkit-scrollbar
+{
+    width: 5px;
+    background-color: #F5F5F5;
+}
+
+body::-webkit-scrollbar-thumb
+{
+    max-height: 100px;
+    border-radius: 5px;
+    background-color: #777;
 }
 
 .selection {
-    border: 2px solid rgba(30,144,255, 1);
-    background: rgba(30,144,255, 0.2);
-}
-
-.menu {
-    display: flex;
-    justify-content: flex-end;
-    padding: 15px 0;
-}
-.menu-element {
-    padding: 0 8px;
-    position: relative;
-}
-.menu-btn {
-    cursor: pointer;
-    opacity: 0.4;
-    transition: 0.2s;
-}
-.menu-btn svg {
-    width: 24px;
-    height: 24px;
-    fill: #fff;
-    stroke: none;
-    transition: 0.2s;
-}
-.menu-btn:hover {
-    opacity: 1;
-}
-.menu-btn.active {
-    opacity: 1;
-}
-.menu-btn.active svg {
-    fill: dodgerblue;
-}
-.menu-submenu {
-    color: #aaa;
-    display: none;
-    padding: 0 0 10px 0;
-}
-.menu-submenu input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    border-radius: 2px;
-    border: 1px solid rgba(255,255,255,0.4);
-    outline: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: 0.2s;
-}
-.menu-submenu input[type="checkbox"] + span {
-    transition: 0.2s color;
-}
-.menu-submenu input[type="checkbox"]::before {
-    content: "";
-    width: 10px;
-    height: 10px;
-    border-radius: 1px;
-    background: dodgerblue;
-    display: block;
-    transform: scale(0.5);
-    opacity: 0;
-    transition: 0.2s;
-}
-.menu-submenu input[type="checkbox"]:checked {
-    border: 1px solid dodgerblue;
-}
-.menu-submenu input[type="checkbox"]:checked::before {
-    transform: scale(1);
-    opacity: 1;
-}
-.menu-submenu input[type="checkbox"]:checked + span {
-    color: dodgerblue;
-}
-.menu-submenu.show {
-    display: block;
-}
-.menu-submenu-element {
-    margin-bottom: 5px;
-}
-.menu-submenu-element:last-child {
-    margin-bottom: 0;
-}
-.menu-submenu-label {
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-    font-size: 12px;
-    cursor: pointer;
-}
-.menu-submenu-label input {
-    margin-right: 6px;
-}
-
-.selected-colors {
-    background: rgba(10,10,10,0.7);
-    border-radius: 0 20px 0 0;
-    z-index: 200;
-    position: fixed;
-    bottom: 0;
-    left:0;
-    transition: 0.5s;
-    display: flex;
-    max-height: 500px;
-    flex-wrap: wrap;;
-    box-shadow: 0 0 4px rgba(0,0,0,0.7);
-}
-.selected-colors div {
-    cursor: pointer;
-    border-radius: 50%;
-    box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
-    margin: 5px;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.selected-colors div span {
-    display: block;
-    width: 18px;
-    height: 18px;
-}
-.selected-colors div svg {
-    width: 18px;
-    height: 18px;
-    fill: #fff;
-    opacity: 0.8;
-}
-
-
-.palette {
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-    grid-gap: 6px;
-}
-.palette-element {
-    border-radius: 2px;
-    height:50px;
-    display: flex;
-    font-size: 14px;
-    justify-content: center;
-    align-items: center;
-    color:#fff;
-    font-family: sans-serif;
-    transition:0.1s all;
-    position: relative;
-    cursor: pointer;
-    font-weight: bold;
-}
-.palette-element.selected {
-    box-shadow:
-    inset 0 0 0 6px rgba(255,255,255,1),
-    inset 0 0 0 7px rgba(0,0,0,0.2);
-    /* transform: scale(0.9); */
-}
-.palette-element-delete {
-    position: absolute;
-    right: 5px;
-    top: 5px;
-    background: transparent;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    display: none;
-}
-.palette-element-delete svg {
-    width: 20px;
-    height: 20px;
-    opacity: 0.8;
-    fill: #fff;
-}
-.palette-manage .palette-element-delete {
-    display: block;
-}
-
-.palette-element-add {
-    cursor: pointer;
-    --color: rgba(255,255,255,0.5);
-    border: 1px solid var(--color);
-    color: var(--color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 3px;
-}
-.palette-element-add svg {
-    fill: var(--color);
+    border: 2px dashed rgba(0,0,0,0.6);
+    background: rgba(0,0,0, 0.1);
 }

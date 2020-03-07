@@ -39,7 +39,7 @@ const myApp = {
             x: screenW - 360,
             y: 0,
             alwaysOnTop: false,
-            frame : true,
+            frame : !debug,
             tabbingIdentifier : "Colors",
             webPreferences: {
                 nodeIntegration: true

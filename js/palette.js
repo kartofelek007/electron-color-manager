@@ -7,8 +7,8 @@ import { DragDrop } from "./utils/dragDrop.js";
 const colors = readColorsFromFile();
 export const paletteElement = document.querySelector("#palette");
 
-export const attachNewColor = function() {
-    const element = createPaletteElement(hexColor);
+export const attachNewColor = function(color) {
+    const element = createPaletteElement(color);
     paletteElement.append(element);
 }
 

@@ -7,25 +7,29 @@ const {
     Tray,
     ipcMain,
     nativeImage
-} = require( 'electron' )
-const path = require( 'path' )
+    } = require('electron');
+const path = require('path');
 const debug = process.argv.includes("debug");
 
 const myApp = {
-    mainWindow : null,
-    pickedWindow : null,
-    windowOpen : true,
-    menu : null,
-    tray : null, //musi byc globalne bo inaczej garbage collector sprawia ze nie mia ikonki w trayu
+    mainWindow: null,
+    contextMenu: false,
+    pickedWindow: null,
+    windowOpen: false,
+    menu: null,
+    tray: null, //musi byc globalne bo inaczej garbage collector sprawia ze nie mia ikonki w trayu
 
     toggleMainWindow() {
-        this.windowOpen = !this.windowOpen;
 
         if (this.windowOpen) {
+            this.windowOpen = false;
             this.mainWindow.hide();
+            console.log(this.windowOpen);
         } else {
+            this.windowOpen = true;
             this.mainWindow.show();
             this.mainWindow.restore();
+            console.log(this.windowOpen);
         }
     },
 
@@ -33,20 +37,23 @@ const myApp = {
         const { width: screenW, height: screenH } = screen.getPrimaryDisplay().workAreaSize;
 
         this.mainWindow = new BrowserWindow({
-            icon : path.join(__dirname, '/images/icon.ico'),
+            icon: path.join(__dirname, '/images/icon.ico'),
             width: 360,
             height: screenH,
             x: screenW - 360,
             y: 0,
             alwaysOnTop: false,
-            frame : !debug,
-            tabbingIdentifier : "Colors",
+            maximizable: false,
+            frame: true,
+            tabbingIdentifier: "Colors",
             webPreferences: {
                 nodeIntegration: true
             }
         });
 
         this.mainWindow.loadFile('index.html');
+
+        this.mainWindow.hide();
 
         this.mainWindow.on('minimize', e => {
             e.preventDefault();
@@ -61,19 +68,43 @@ const myApp = {
             this.toggleMainWindow();
         });
 
-        if (!debug) Menu.setApplicationMenu( null );
+        Menu.setApplicationMenu(null);
+
+        if (debug) {
+            this.mainWindow.webContents.openDevTools()
+        }
+    },
+
+    createContextMenu() {
+        this.contextMenu = Menu.buildFromTemplate([
+            {
+                label: 'Author',
+                role: 'help',
+                click: () => {
+                    shell.openExternal('http://domanart.pl/portfolio');
+                }
+            },
+            {
+                label: 'Quit program',
+                role: 'close',
+                click: () => {
+                    this.mainWindow.close()
+                }
+            }
+        ]);
+        this.tray.setContextMenu(this.contextMenu);
     },
 
     createColorPickWindow() {
         this.pickedWindow = new BrowserWindow({
-            icon : path.join(__dirname, './images/icon.ico'),
+            icon: path.join(__dirname, './images/icon.ico'),
             fullscreen: true,
-            alwaysOnTop : true,
-            movable : false,
-            minimizable : false,
-            maximizable : false,
+            alwaysOnTop: true,
+            movable: false,
+            minimizable: false,
+            maximizable: false,
             transparent: true,
-            tabbingIdentifier : "Colors",
+            tabbingIdentifier: "Colors",
             frame: false,
             hide: true,
             webPreferences: {
@@ -84,7 +115,7 @@ const myApp = {
         this.pickedWindow.loadFile('pick-color.html');
         this.pickedWindow.once('ready-to-show', () => {
             this.pickedWindow.show();
-        })
+        });
         //pickedWindow.webContents.openDevTools()
     },
 
@@ -99,20 +130,23 @@ const myApp = {
     },
 
     init() {
-        app.on( 'ready', () => this.createMainWindow() )
-
-        app.on( 'window-all-closed', function() {
-            if ( process.platform !== 'darwin' ) app.quit()
+        app.on('ready', () => {
+            this.createMainWindow();
+            this.createContextMenu();
         });
 
-        app.on( 'activate', function() {
-            if ( BrowserWindow.getAllWindows().length === 0 ) {
+        app.on('window-all-closed', function() {
+            if (process.platform !== 'darwin') app.quit()
+        });
+
+        app.on('activate', function() {
+            if (BrowserWindow.getAllWindows().length === 0) {
                 this.createWindow();
             }
         });
 
         this.bindCommunication();
     }
-}
+};
 
 myApp.init();

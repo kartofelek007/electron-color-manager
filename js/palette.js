@@ -28,7 +28,11 @@ export const createPaletteElement = function(color) {
     }
     btn.addEventListener("click", e => {
         e.currentTarget.parentElement.remove();
-        saveColorsToFile();
+
+        const paletteElement = document.querySelector("#palette");
+        const elements = paletteElement.querySelectorAll(".palette-element");
+        const palette = [...elements].map(el => el.dataset.color);
+        saveColorsToFile(palette);
         selectedColorsPub.emit();
     });
     div.append(btn);
@@ -87,14 +91,18 @@ for (const color of colors) {
 
 const drag = new DragDrop('#palette', {
     afterDrag(el) {
-        saveColorsToFile();
+        const paletteElement = document.querySelector("#palette");
+        const elements = paletteElement.querySelectorAll(".palette-element");
+        const palette = [...elements].map(el => el.dataset.color);
+        saveColorsToFile(palette);
+        saveColorsToFile(palette);
     },
     className : "palette-element"
 });
 
-menuPub.subscribe(mode => {
-    palette.classList.toggle("palette-manage");
-    if (palette.classList.contains("palette-manage")) {
+menuPub.subscribe(() => {
+    if (menuPub.mode === "manage") {
+        palette.classList.add("palette-manage");
         selection.disable();
         selection.clearSelection()
         paletteElement.querySelectorAll(".selected").forEach(el => el.classList.remove("selected"));
@@ -102,6 +110,7 @@ menuPub.subscribe(mode => {
         selectedColorsPub.emit();
         drag.initDraggable();
     } else {
+        palette.classList.remove("palette-manage");
         selection.enable();
         drag.removeDraggable();
     }

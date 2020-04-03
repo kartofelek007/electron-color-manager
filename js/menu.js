@@ -10,7 +10,7 @@ export const menuPub = {
     },
 
     emit() {
-        this.subscribers.forEach(s => s());
+        this.subscribers.forEach(s => s(this.mode));
     },
 }
 
@@ -18,6 +18,12 @@ export const menuPub = {
 const manageBtn = document.querySelector('#menuManage');
 
 manageBtn.addEventListener("click", e => {
+    menuPub.mode = menuPub.mode === "normal" ? "manage" : "normal";
+    if (menuPub.mode === "manage") {
+        manageBtn.classList.add("active");
+    } else {
+        manageBtn.classList.remove("active");
+    }
     menuPub.emit();
 });
 
@@ -36,7 +42,7 @@ for (const key of keys) {
             </label>
         </div>
     `;
-    console.log(optionsPub.opts[key]);
+
     const input = div.querySelector("input");
     input.checked = optionsPub.opts[key].status;
     input.addEventListener("change", e => {

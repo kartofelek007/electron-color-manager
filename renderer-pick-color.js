@@ -94,7 +94,7 @@ const drawZoom = function(mouseX, mouseY) {
     ctx2.drawImage(
         canvas1,
         source.x, source.y, source.size, source.size, //source
-        draw.x, draw.y, draw.size, draw.size, //dest
+        draw.x, draw.y, draw.size, draw.size //dest
     );
     //line Y
     ctx2.strokeStyle = "rgba(0, 0, 0, 0.2)";

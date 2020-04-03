@@ -1,23 +1,20 @@
 const fs = require("fs");
 const path = require("path");
-const paletteElement = document.querySelector("#palette");
-const fileUrl = path.resolve(__dirname, "./colors.json");
+const { app } = require("electron").remote;
+const fileUrl = app.getPath("appData") + "/" + "colors.json";
+import defaultPalette from "./default-palette.js";
+const dialog = require('electron').remote.dialog;
 
-export const saveColorsToFile = function() {
-    const json = {
-        colors : []
-    };
-
-    const elements = paletteElement.querySelectorAll(".palette-element");
-    for (const el of elements) {
-        json.colors.push(el.dataset.color);
-    }
+export const saveColorsToFile = function(palette) {
     try {
-    fs.writeFileSync(fileUrl, JSON.stringify(json));
+        fs.writeFileSync(fileUrl, JSON.stringify({colors: palette}));
     } catch (err) {
-        alert("Wystąpił błąd w czasie zapisu", err);
+        dialog.showMessageBoxSync({
+            type: "error",
+            title: "Error to save in file"
+        });
     }
-}
+};
 
 export const readColorsFromFile = function() {
     try {
@@ -25,6 +22,7 @@ export const readColorsFromFile = function() {
         const json = JSON.parse(rawData);
         return [...json.colors];
     } catch (err) {
-        return [];
+        saveColorsToFile(defaultPalette);
+        return [...defaultPalette];
     }
-}
+};

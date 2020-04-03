@@ -1,11 +1,11 @@
 {
-  "name": "electron-quick-start",
+  "name": "Colors",
   "version": "1.0.0",
   "description": "Micro Color manager",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder"
+    "build": "rimraf dist & electron-builder"
   },
   "keywords": [
     "Electron",
@@ -19,8 +19,8 @@
     "electron-builder": "^22.4.0"
   },
   "build": {
-    "appId": "PresentationDrawer",
-    "productName": "PresentationDrawer",
+    "appId": "Colors",
+    "productName": "Colors",
     "copyright": "Marcin Domański",
     "files": [
       "**/*",
@@ -38,7 +38,7 @@
       "icon": "images/icon.ico"
     },
     "portable": {
-      "artifactName": "color_manager_portable.exe"
+      "artifactName": "colors.exe"
     }
   },
   "dependencies": {

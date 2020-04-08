@@ -10,3 +10,32 @@ body {
 #optCanvas {
     pointer-events: none;
 }
+
+.color-picker-close {
+    display: none;
+    z-index: 2;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 70px;
+    height: 70px;
+    background: #222;
+    border:0;
+    cursor: pointer;
+    outline: none;
+}
+.color-picker-close::before,
+.color-picker-close::after {
+    content: "";
+
+    width: 30px;
+    height: 3px;
+    background: #fff;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+.color-picker-close::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}

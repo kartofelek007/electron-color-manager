@@ -2,7 +2,6 @@ const electron = require('electron');
 const {ipcRenderer} = require('electron');
 const remote = electron.remote;
 const size = remote.getCurrentWindow().webContents.getOwnerBrowserWindow().getBounds();
-
 import {ScreenCapture} from "./js/utils/ScreenCapture.js";
 
 const canvas1 = document.querySelector("#mainCanvas");
@@ -25,43 +24,6 @@ const zoom = {
 const drawSize  = {
     zoom : 200,
     color : 40
-}
-
-const drawLines = function(mouseX, mouseY) {
-    const size = 4;
-    const fix = 0.5;
-    ctx2.save();
-    ctx2.strokeStyle = "rgba(100, 100, 100, 0.6)";
-    //x
-    ctx2.beginPath();
-    ctx2.moveTo(0, mouseY);
-    ctx2.lineTo(fix + mouseX - size, fix + mouseY);
-    ctx2.stroke();
-
-    ctx2.beginPath();
-    ctx2.moveTo(fix + mouseX + size, fix + mouseY);
-    ctx2.lineTo(canvas2.width, fix + mouseY);
-    ctx2.stroke();
-
-    //y
-    ctx2.beginPath();
-    ctx2.moveTo(fix + mouseX, 0);
-    ctx2.lineTo(fix + mouseX, fix + mouseY - size);
-    ctx2.stroke();
-
-    ctx2.beginPath();
-    ctx2.moveTo(fix + mouseX, fix + mouseY + size);
-    ctx2.lineTo(fix + mouseX, canvas2.height);
-    ctx2.stroke();
-
-    //circle
-    ctx2.beginPath();
-    ctx2.arc(mouseX, mouseY, size, 0, 2 * Math.PI);
-    ctx2.stroke();
-
-    //ctx2.drawImage(img, mouseX - 2, mouseY - 30);
-
-    ctx2.restore();
 }
 
 const drawZoom = function(mouseX, mouseY) {
@@ -157,26 +119,45 @@ const sc = new ScreenCapture();
 sc.capture().then(canvasFromSC => {
     ctx1.drawImage(canvasFromSC, 0, 0, canvas1.width, canvas1.height, 0, 0, canvas1.width, canvas1.height);
 
-    canvas1.addEventListener("mousemove", e => {
-        const pixelData = [...ctx1.getImageData(e.offsetX, e.offsetY, 1, 1).data];
-        ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
-        drawLines(e.offsetX, e.offsetY);
-        drawZoom(e.offsetX, e.offsetY);
-        drawColor(pixelData);
+    document.querySelector(".color-picker-close").style.display = "block"
+
+    const img = new Image();
+
+    img.addEventListener("load", e => {
+        document.addEventListener("mousemove", e => {
+            const pixelData = [...ctx1.getImageData(e.offsetX, e.offsetY, 1, 1).data];
+            ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+            if (e.target.tagName.toLowerCase() === "canvas") {
+                ctx2.drawImage(img, e.offsetX - 2, e.offsetY - 30);
+            }
+            drawZoom(e.offsetX, e.offsetY);
+            drawColor(pixelData);
+        })
     })
 
     canvas1.addEventListener("click", e => {
         const pixelData = [...ctx1.getImageData(e.offsetX, e.offsetY, 1, 1).data];
-        console.log(pixelData);
         ipcRenderer.send('colorPicked', pixelData );
-        const window = remote.getCurrentWindow();
-        window.close();
+        ipcRenderer.send('closeColorPickWindow', {});
     })
 
-    document.addEventListener("keyup", e => {
-        if (e.key === "Escape") {
-            const window = remote.getCurrentWindow();
-            window.close();
-        }
-    })
+    img.src = "images/dropper-icon.png";
+}).catch((err) => {
+    // ...
 })
+
+//close window
+const closeWindow = function() {
+    ipcRenderer.send('closeColorPickWindow', {});
+}
+
+document.addEventListener("keyup", e => {
+    if (e.key === "Escape") {
+        closeWindow();
+    }
+})
+
+const close = document.querySelector(".color-picker-close");
+close.addEventListener("click", e => {
+    closeWindow();
+});

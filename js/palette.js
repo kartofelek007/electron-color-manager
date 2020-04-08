@@ -9,7 +9,7 @@ export const paletteElement = document.querySelector("#palette");
 
 export const attachNewColor = function(color) {
     const element = createPaletteElement(color);
-    paletteElement.append(element);
+    paletteElement.prepend(element);
 }
 
 export const createPaletteElement = function(color) {
@@ -94,7 +94,6 @@ const drag = new DragDrop('#palette', {
         const paletteElement = document.querySelector("#palette");
         const elements = paletteElement.querySelectorAll(".palette-element");
         const palette = [...elements].map(el => el.dataset.color);
-        saveColorsToFile(palette);
         saveColorsToFile(palette);
     },
     className : "palette-element"

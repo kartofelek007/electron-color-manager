@@ -9,8 +9,12 @@ const { ipcRenderer } = require("electron");
 ipcRenderer.on('pickedColor', function(event , data) {
     const color = data.color;
     const hexColor = rgbToHex(color[0], color[1], color[2]);
+    console.log(hexColor);
     attachNewColor(hexColor);
-    saveColorsToFile();
+    const paletteElement = document.querySelector("#palette");
+    const elements = paletteElement.querySelectorAll(".palette-element");
+    const palette = [...elements].map(el => el.dataset.color);
+    saveColorsToFile(palette);
 });
 
 optionsPub.subscribe(() => {

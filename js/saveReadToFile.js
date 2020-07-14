@@ -2,8 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const { app } = require("electron").remote;
 const fileUrl = app.getPath("appData") + "/" + "colors.json";
-import defaultPalette from "./default-palette.js";
 const dialog = require('electron').remote.dialog;
+import defaultPalette from "./default-palette.js";
 
 export const saveColorsToFile = function(palette) {
     try {

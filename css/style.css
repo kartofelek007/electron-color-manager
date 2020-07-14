@@ -32,6 +32,6 @@ body::-webkit-scrollbar-thumb
 }
 
 .selection {
-    border: 2px dashed rgba(0,0,0,0.6);
-    background: rgba(0,0,0, 0.1);
+    border: 2px solid dodgerblue;
+    background: rgba(30, 144, 255, 0.3);
 }

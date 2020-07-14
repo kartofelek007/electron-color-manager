@@ -5,7 +5,6 @@
     position: fixed;
     bottom: 0;
     left:0;
-    display: flex;
     max-height: 500px;
     /* flex-wrap: wrap;; */
     display: grid;

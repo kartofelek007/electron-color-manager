@@ -1,73 +1,75 @@
-import { optionsPub } from "./options.js";
 const { ipcRenderer } = require("electron");
+import options from "./options.js";
+import pubsub from "./pubsub.js";
+import globalState from "./globalState.js";
 
-export const menuPub = {
-    mode : "normal",
-    subscribers : [],
-
-    subscribe(subscriber) {
-        this.subscribers.push(subscriber);
-    },
-
-    emit() {
-        this.subscribers.forEach(s => s(this.mode));
-    },
-}
-
-//manage button
-const manageBtn = document.querySelector('#menuManage');
-
-manageBtn.addEventListener("click", e => {
-    menuPub.mode = menuPub.mode === "normal" ? "manage" : "normal";
-    if (menuPub.mode === "manage") {
-        manageBtn.classList.add("active");
-    } else {
-        manageBtn.classList.remove("active");
+class Menu {
+    constructor() {
+        this.bindBtnManageMenu();
+        this.bindBtnAddNewColor();
+        this.createSubmenuWithOptions();
     }
-    menuPub.emit();
-});
 
-//submenu
-const optionsSubmenuElement = document.querySelector('#optionsSubmenu');
-const keys = Object.keys(optionsPub.opts);
-for (const key of keys) {
-    const div = document.createElement("div");
-    div.innerHTML = `
-        <div class="menu-submenu-element">
-            <label class="menu-submenu-label">
-                <input type="checkbox" data-key="${key}">
-                <span>
-                    ${optionsPub.opts[key].textInMenu}
-                </span>
-            </label>
-        </div>
-    `;
+    bindBtnAddNewColor() {
+        const btnAdd = document.querySelector("#menuAdd");
+        btnAdd.addEventListener("click", e => {
+            const res = ipcRenderer.send('createColorPickWindow', {});
+        });
+    }
 
-    const input = div.querySelector("input");
-    input.checked = optionsPub.opts[key].status;
-    input.addEventListener("change", e => {
-        optionsPub.opts[key].status = e.target.checked;
-        optionsPub.emit();
-    });
-    optionsSubmenuElement.append(div);
+    bindBtnManageMenu() {
+        const manageBtn = document.querySelector('#menuManage');
+        manageBtn.addEventListener("click", e => {
+            manageBtn.classList.toggle("active");
+            const mode = (manageBtn.classList.contains("active"))? "manage" : "normal";
+            pubsub.emit("menuChange", mode);
+        });
+    }
+
+    createInput(key) {
+        const div = document.createElement("div");
+        div.innerHTML = `
+            <div class="menu-submenu-element">
+                <label class="menu-submenu-label">
+                    <input type="checkbox" data-key="${key}">
+                    <span>
+                        ${options.opts[key].textInMenu}
+                    </span>
+                </label>
+            </div>
+        `;
+
+        const input = div.querySelector("input");
+        input.checked = options.opts[key].status;
+        input.addEventListener("change", e => {
+            options.opts[key].status = e.target.checked;
+            pubsub.emit("optionsChange", options.opts);
+        });
+        return div
+    }
+
+    createSubmenuWithOptions() {
+        const optionsSubmenuElement = document.querySelector('#menuSubmenu');
+        const keys = Object.keys(options.opts);
+        for (const key of keys) {
+            optionsSubmenuElement.append(this.createInput(key));
+        }
+
+        pubsub.subscribe("optionsChange", () => {
+            optionsSubmenuElement.querySelectorAll("input").forEach(el => {
+                el.checked = options.opts[el.dataset.key].status
+            });
+        });
+
+        const menuToggle = document.querySelector("#menuCopySetup");
+        menuToggle.addEventListener("click", e => {
+            e.currentTarget.classList.toggle("active");
+            optionsSubmenuElement.classList.toggle("show");
+        });
+    }
 }
 
-optionsPub.subscribe(() => {
-    optionsSubmenuElement.querySelectorAll("input").forEach(el => {
-        el.checked = optionsPub.opts[el.dataset.key].status
-    });
-})
-
-//toggle submenu
-const menuToggle = document.querySelector("#menuCopySetup");
-menuToggle.addEventListener("click", e => {
-    e.currentTarget.classList.toggle("active");
-    optionsSubmenuElement.classList.toggle("show");
-})
+export default new Menu;
 
 
-//pick a color
-const btnAdd = document.querySelector("#menuAdd");
-btnAdd.addEventListener("click", e => {
-    const res = ipcRenderer.send('createColorPickWindow', {});
-});
+

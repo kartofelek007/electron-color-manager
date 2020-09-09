@@ -15,7 +15,7 @@
   "author": "Marcin Domański",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^8.0.3",
+    "electron": "^8.2.4",
     "electron-builder": "^22.4.0"
   },
   "build": {

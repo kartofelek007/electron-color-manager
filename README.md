@@ -1,9 +1,10 @@
 # Color Manager
-App for color managing.
+A simple application for picking and managing colors.
 
 Video from the presentation:
 
 https://www.youtube.com/watch?v=rw3y8Hy8hWo
+
 
 
 ### Installation

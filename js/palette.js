@@ -46,7 +46,7 @@ class Palette {
             const elements = paletteElement.querySelectorAll(".palette-element");
             const palette = [...elements].map(el => el.dataset.color);
             saveColorsToFile(palette);
-            pubsub.emit("colorSelect");
+            //pubsub.emit("colorSelect");
         });
         div.append(btn);
 
@@ -55,6 +55,8 @@ class Palette {
 
     createSelection() {
         //https://github.com/Simonwep/selection
+        //FIXME: na razie nie aktualizowac do v2.3 bo ma problemy z zaznaczaniem
+        //https://github.com/Simonwep/selection/issues/103
         const Selection = require("@simonwep/selection-js");
         const selection = new Selection({
             class: 'selection',
@@ -72,7 +74,8 @@ class Palette {
             selectionAreaContainer: 'body',
             scrollSpeedDivider: 10,
             manualScrollSpeed: 750
-        }).on('start', ({inst, selected, oe}) => {
+        })
+        .on('start', ({inst, selected, oe}) => {
             if (!oe.ctrlKey && !oe.metaKey) {
                 for (const el of selected) {
                     el.classList.remove('selected');
@@ -80,7 +83,8 @@ class Palette {
                 }
                 inst.clearSelection();
             }
-        }).on('move', ({changed: {removed, added}}) => {
+        })
+        .on('move', ({changed: {removed, added}}) => {
             for (const el of added) {
                 el.classList.add('selected');
             }
@@ -89,7 +93,8 @@ class Palette {
             }
             globalState.colors = [...paletteElement.querySelectorAll(".selected")].map(el => el.dataset.color);
             pubsub.emit("colorsSelected");
-        }).on('stop', ({inst}) => {
+        })
+        .on('stop', ({inst}) => {
             inst.keepSelection();
         });
 

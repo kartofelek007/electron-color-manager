@@ -19,12 +19,12 @@ const zoom = {
     minZoom : 2,
     maxZoom : 10,
     step: 0.5
-}
+};
 
 const drawSize  = {
     zoom : 200,
     color : 40
-}
+};
 
 const drawZoom = function(mouseX, mouseY) {
     const size = drawSize.zoom;
@@ -42,13 +42,13 @@ const drawZoom = function(mouseX, mouseY) {
         x : mouseX - (size / zoom.zoom / 2),
         y : mouseY - (size / zoom.zoom / 2),
         size : size / zoom.zoom
-    }
+    };
 
     const draw = {
         x : canvas2.width - size - 20,
         y : canvas2.height - size - 20,
         size: size
-    }
+    };
 
     ctx2.lineWidth = 5;
     ctx2.strokeStyle = "rgba(255, 255, 255, 1)";
@@ -78,12 +78,12 @@ const drawZoom = function(mouseX, mouseY) {
     ctx2.shadowColor="black";
     ctx2.shadowBlur=2;
     ctx2.strokeStyle = "rgba(0, 0, 0, 0.4)";
-    ctx2.fillStyle = "#FFF"
+    ctx2.fillStyle = "#FFF";
     const text = `${zoom.zoom.toFixed(1)}x`;
     ctx2.strokeText(text, draw.x + 5, draw.y + 5);
     ctx2.fillText(text, draw.x + 5, draw.y + 5);
     ctx2.restore();
-}
+};
 
 const drawColor = function(color) {
     const size = drawSize.color;
@@ -91,7 +91,7 @@ const drawColor = function(color) {
         x : canvas2.width - size - 25,
         y : canvas2.height - size - 25,
         size : size
-    }
+    };
     ctx2.save();
     ctx2.fillStyle = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
     ctx2.lineWidth = 5;
@@ -99,7 +99,7 @@ const drawColor = function(color) {
     ctx2.strokeRect(draw.x, draw.y, size, size);
     ctx2.fillRect(draw.x, draw.y, size, size);
     ctx2.restore();
-}
+};
 
 document.addEventListener("wheel", e => {
     if (event.deltaY < 0) {
@@ -113,13 +113,13 @@ document.addEventListener("wheel", e => {
     drawZoom(e.offsetX, e.offsetY);
     const pixelData = [...ctx1.getImageData(e.offsetX, e.offsetY, 1, 1).data];
     drawColor(pixelData);
-})
+});
 
 const sc = new ScreenCapture();
 sc.capture().then(canvasFromSC => {
     ctx1.drawImage(canvasFromSC, 0, 0, canvas1.width, canvas1.height, 0, 0, canvas1.width, canvas1.height);
 
-    document.querySelector(".color-picker-close").style.display = "block"
+    document.querySelector(".color-picker-close").style.display = "block";
 
     const img = new Image();
 
@@ -133,29 +133,29 @@ sc.capture().then(canvasFromSC => {
             drawZoom(e.offsetX, e.offsetY);
             drawColor(pixelData);
         })
-    })
+    });
 
     canvas1.addEventListener("click", e => {
         const pixelData = [...ctx1.getImageData(e.offsetX, e.offsetY, 1, 1).data];
         ipcRenderer.send('colorPicked', pixelData );
         ipcRenderer.send('closeColorPickWindow', {});
-    })
+    });
 
     img.src = "images/dropper-icon.png";
 }).catch((err) => {
     // ...
-})
+});
 
 //close window
 const closeWindow = function() {
     ipcRenderer.send('closeColorPickWindow', {});
-}
+};
 
 document.addEventListener("keyup", e => {
     if (e.key === "Escape") {
         closeWindow();
     }
-})
+});
 
 const close = document.querySelector(".color-picker-close");
 close.addEventListener("click", e => {

@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    cursor: none;
 }
 #mainCanvas, #optCanvas {
     cursor: none;
@@ -27,7 +28,6 @@ body {
 .color-picker-close::before,
 .color-picker-close::after {
     content: "";
-
     width: 30px;
     height: 3px;
     background: #fff;

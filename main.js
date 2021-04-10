@@ -42,7 +42,8 @@ const myApp = {
             tabbingIdentifier: "Colors",
             webPreferences: {
                 nodeIntegration: true,
-                enableRemoteModule: true
+                enableRemoteModule: true,
+                contextIsolation: false,
             }
         });
 
@@ -110,7 +111,8 @@ const myApp = {
             hide: true,
             webPreferences: {
                 nodeIntegration: true,
-                enableRemoteModule: true
+                enableRemoteModule: true,
+                contextIsolation: false,
             }
         });
 

@@ -4,6 +4,7 @@
     grid-gap: 6px;
 }
 .palette-element {
+    user-select: none;
     border-radius: 2px;
     height:50px;
     display: flex;

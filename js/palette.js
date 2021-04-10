@@ -4,6 +4,7 @@ import { colorBright } from "./utils/colors.js";
 import { DragDrop } from "./utils/dragDrop.js";
 import pubsub from "./pubsub.js";
 import globalState from "./globalState.js";
+const Selection = require("@simonwep/selection-js");
 
 class Palette {
     constructor() {
@@ -57,45 +58,52 @@ class Palette {
         //https://github.com/Simonwep/selection
         //FIXME: na razie nie aktualizowac do v2.3 bo ma problemy z zaznaczaniem
         //https://github.com/Simonwep/selection/issues/103
-        const Selection = require("@simonwep/selection-js");
+
         const selection = new Selection({
             class: 'selection',
-            frame: document,
             startThreshold: 10,
-            disableTouch: false,
-            mode: 'touch',
-            tapMode: 'native',
-            singleClick: true,
+
+            singleTap: {
+                allow: true,
+                intersect: 'touch'
+            },
+
+            allowTouch: false,
+            overlap: 'invert',
             selectables: [
                 ".palette-element"
             ],
             startareas: ['html'],
             boundaries: ['html'],
-            selectionAreaContainer: 'body',
-            scrollSpeedDivider: 10,
-            manualScrollSpeed: 750
-        })
-        .on('start', ({inst, selected, oe}) => {
-            if (!oe.ctrlKey && !oe.metaKey) {
-                for (const el of selected) {
-                    el.classList.remove('selected');
-                    inst.removeFromSelection(el);
-                }
-                inst.clearSelection();
+
+            scrolling: {
+                speedDivider: 10,
+                manualSpeed: 750
             }
         })
-        .on('move', ({changed: {removed, added}}) => {
-            for (const el of added) {
+
+        selection.on('start', ({event, store}) => {
+            if (!event.ctrlKey && !event.metaKey) {
+                [...paletteElement.querySelectorAll(".selected")].forEach(el => el.classList.remove("selected"));
+                selection.clearSelection();
+            }
+        })
+
+        selection.on('move', ({event, store}) => {
+            for (const el of store.changed.added) {
                 el.classList.add('selected');
             }
-            for (const el of removed) {
+            for (const el of store.changed.removed) {
                 el.classList.remove('selected');
             }
             globalState.colors = [...paletteElement.querySelectorAll(".selected")].map(el => el.dataset.color);
             pubsub.emit("colorsSelected");
         })
-        .on('stop', ({inst}) => {
-            inst.keepSelection();
+
+        selection.on('stop', ({event, store}) => {
+            globalState.colors = [...paletteElement.querySelectorAll(".selected")].map(el => el.dataset.color);
+            pubsub.emit("colorsSelected");
+            selection.keepSelection();
         });
 
         const paletteElement = this.paletteElement;

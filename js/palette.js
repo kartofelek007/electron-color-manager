@@ -56,9 +56,6 @@ class Palette {
 
     createSelection() {
         //https://github.com/Simonwep/selection
-        //FIXME: na razie nie aktualizowac do v2.3 bo ma problemy z zaznaczaniem
-        //https://github.com/Simonwep/selection/issues/103
-
         const selection = new Selection({
             class: 'selection',
             startThreshold: 10,
@@ -116,7 +113,7 @@ class Palette {
             className : "palette-element"
         });
 
-        pubsub.subscribe("menuChange", (mode) => {
+        pubsub.on("menuChange", (mode) => {
             if (mode === "manage") {
                 this.paletteElement.classList.add("palette-manage");
                 selection.disable();

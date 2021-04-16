@@ -7,7 +7,7 @@ class SelectedColors {
     constructor() {
         this.selectedColorsElement = document.querySelector("#selectedColors");
 
-        pubsub.subscribe("colorSelect", () => {
+        pubsub.on("colorSelect", () => {
             this.createSelectedColorsElement();
         });
     }

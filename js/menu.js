@@ -55,7 +55,7 @@ class Menu {
             optionsSubmenuElement.append(this.createInput(key));
         }
 
-        pubsub.subscribe("optionsChange", () => {
+        pubsub.on("optionsChange", () => {
             optionsSubmenuElement.querySelectorAll("input").forEach(el => {
                 el.checked = options.opts[el.dataset.key].status
             });

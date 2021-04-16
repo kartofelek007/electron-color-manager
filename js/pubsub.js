@@ -1,22 +1,20 @@
 export default {
     subscribers : {},
 
-    subscribe(canalName, fn) {
-        if (this.subscribers[canalName] === undefined) {
-            this.subscribers[canalName] = [];
+    on(subject, fn) {
+        if (this.subscribers[subject] === undefined) {
+            this.subscribers[subject] = [];
         }
-        this.subscribers[canalName].push(fn);
+        this.subscribers[subject].push(fn);
     },
 
-    emit(canalName, data) {
-        if (this.subscribers[canalName] !== undefined)
-            this.subscribers[canalName].forEach(s => s(data));
+    off(subject, fn) {
+        if (this.subscribers[subject] === undefined) return;
+        this.subscribers[subject].filter(el => el !== fn);
     },
 
-    saveToStorage() {
-        localStorage.setItem(
-            "options",
-            JSON.stringify(this.opts)
-        );
-    }
+    emit(subject, data) {
+        if (this.subscribers[subject] === undefined) return;
+        this.subscribers[subject].forEach(fn => fn(data));
+    },
 }

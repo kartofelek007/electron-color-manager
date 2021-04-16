@@ -18,12 +18,12 @@ ipcRenderer.on('pickedColor', function(event , data) {
     saveColorsToFile(colorsPelette);
 });
 
-pubsub.subscribe("optionsChange", (optionsValues) => {
+pubsub.on("optionsChange", (optionsValues) => {
     selectedColors.copyColorsToClipboard(globalState.colors);
     options.saveToStorage();
 });
 
-pubsub.subscribe("colorsSelected", () => {
+pubsub.on("colorsSelected", () => {
     selectedColors.createSelectedColorsElement(globalState.colors);
     selectedColors.copyColorsToClipboard(globalState.colors);
 });
